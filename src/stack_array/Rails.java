@@ -6,7 +6,8 @@ import helper.Streamer;
  * Created by Saif on 8/29/2017.
  */
 public class Rails {
-    private static final String fileName = "/Users/Saif/Documents/Repositories/projects/src/stack_array/rails";
+    //private static final String fileName = "/Users/Saif/Documents/Repositories/projects/src/stack_array/rails";
+    private static final String fileName = "C:\\Users\\180502\\Desktop\\AdvancedCS\\src\\stack_array\\rails";
 
     Streamer streamer;
 
