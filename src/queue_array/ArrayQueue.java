@@ -13,7 +13,7 @@ public class ArrayQueue<Item> implements IQueue<Item> {
     private int head;
     private int tail;
 
-    public ArrayQueue(int initSize) throws IllegalArgumentException {
+    public ArrayQueue(int initSize) {
         if (initSize <= 0)
             throw new IllegalArgumentException("Size can not be less than or equal to zero");
 
@@ -29,7 +29,7 @@ public class ArrayQueue<Item> implements IQueue<Item> {
     }
 
     @Override
-    public void enqueue(Item value) throws IllegalStateException {
+    public void enqueue(Item value) {
         if ((tail + 1) % size == head) {
             throw new IllegalStateException("Queue is full");
         } else if (isEmpty()) {
@@ -43,7 +43,7 @@ public class ArrayQueue<Item> implements IQueue<Item> {
     }
 
     @Override
-    public Item dequeue() throws IllegalStateException {
+    public Item dequeue() {
         Item out;
 
         if (isEmpty()) {
@@ -62,7 +62,7 @@ public class ArrayQueue<Item> implements IQueue<Item> {
         return out;
     }
 
-    public Item peek() throws IllegalStateException {
+    public Item peek() {
         if (isEmpty())
             throw new IllegalStateException("Can not peek an empty queue");
 
