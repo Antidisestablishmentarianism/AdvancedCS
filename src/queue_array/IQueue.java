@@ -7,6 +7,8 @@ public interface IQueue<Item> {
 
     boolean isEmpty();
 
+    boolean isFull();
+
     void enqueue(Item value);
 
     Item dequeue();

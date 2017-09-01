@@ -29,8 +29,13 @@ public class ArrayQueue<Item> implements IQueue<Item> {
     }
 
     @Override
+    public boolean isFull() {
+        return (tail + 1) % size == head;
+    }
+
+    @Override
     public void enqueue(Item value) {
-        if ((tail + 1) % size == head) {
+        if (isFull()) {
             throw new IllegalStateException("Queue is full");
         } else if (isEmpty()) {
             head++;
