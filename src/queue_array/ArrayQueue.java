@@ -23,6 +23,21 @@ public class ArrayQueue<Item> implements IQueue<Item> {
         tail = -1;
     }
 
+    public int maxSize() {
+        return size;
+    }
+
+    public int size() {
+        int count = 0;
+
+        for (Item element : container) {
+            if (element != null)
+                count++;
+        }
+
+        return count;
+    }
+
     @Override
     public boolean isEmpty() {
         return head == -1 && tail == -1;
@@ -75,7 +90,7 @@ public class ArrayQueue<Item> implements IQueue<Item> {
     }
 
     public String toString() {
-        return "[head = " + head + ", tail = " + tail + ", queue = " + Arrays.toString(container) + "]";
+        return "[head = " + head + ", tail = " + tail + ", queue = " + Arrays.toString(container) + ", size = " + size() + "]";
     }
 
     public void clear() {
