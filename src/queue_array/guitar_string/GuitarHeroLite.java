@@ -2,6 +2,9 @@ package queue_array.guitar_string;
 
 import queue_array.ArrayQueue;
 
+import javax.swing.*;
+import java.awt.*;
+
 /*****************************************************************************
  *  Compilation:  javac queue_array.guitar_string.GuitarHeroLite.java
  *  Execution:    java  queue_array.guitar_string.GuitarHeroLite
@@ -20,8 +23,6 @@ public class GuitarHeroLite {
         String keyboard = "q2we4r5ty7u8i9op-[=zxdcfvgbnjmk,.;/' ";
 
         GuitarString[] strings = new GuitarString[keyboard.length()];
-
-        ArrayQueue<Double> samples = new ArrayQueue<>(512);
 
         for (int i = 0; i < strings.length; i++)
             strings[i] = new GuitarString(440 * Math.pow(1.05956, i - 24));
@@ -51,17 +52,9 @@ public class GuitarHeroLite {
             // send the result to standard audio
             StdAudio.play(sample);
 
-            /*if (samples.isFull()) samples.dequeue();
-            samples.enqueue(sample);
-
-            StdDraw.clear();
-            for (int i = 0; i < samples.maxSize(); i++)
-                if (samples.elementAt(i) != null)
-                    StdDraw.point(samples.maxSize() - i, (samples.maxSize() / 2) + (10 * samples.elementAt(i)));
-
             // advance the simulation of each guitar string by one step
             for (GuitarString string : strings)
-                string.tick();*/
+                string.tick();
         }
     }
 }
