@@ -22,30 +22,36 @@ public class GuitarHeroLite {
         GuitarString[] strings = new GuitarString[keyboard.length()];
 
         for (int i = 0; i < strings.length; i++)
-            strings[i] = new GuitarString(440 * Math.pow(1.05956, 3.0));
+            strings[i] = new GuitarString(440 * Math.pow(1.05956, i - 24));
 
         // the main input loop
         while (true) {
 
             // check if the user has typed a key, and, if so, process it
             if (StdDraw.hasNextKeyTyped()) {
- 
+
                 // the user types this character
                 char key = StdDraw.nextKeyTyped();
 
+                // Check which index of keyboard was pressed
+                int i = keyboard.indexOf(key);
 
+                // If valid key, play note
+                if (i != -1)
+                    strings[i].pluck();
             }
 
             // compute the superposition of the samples
-            //double sample = stringA.sample() + stringC.sample();
+            double sample = 0;
+            for (GuitarString string : strings)
+                sample += string.sample();
 
             // send the result to standard audio
-            //StdAudio.play(sample);
+            StdAudio.play(sample);
 
             // advance the simulation of each guitar string by one step
-            //stringA.tick();
-            //stringC.tick();
+            for (GuitarString string : strings)
+                string.tick();
         }
     }
-
 }

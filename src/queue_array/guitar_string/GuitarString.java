@@ -42,9 +42,7 @@ public class GuitarString {
     }
 
     public double sample() {
-        if (buffer.isEmpty()) return 0;
-
-        return buffer.peek();
+        return buffer.isEmpty() ? 0 : buffer.peek();
     }
 
     public int time() {
