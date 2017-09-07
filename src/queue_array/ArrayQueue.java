@@ -8,35 +8,28 @@ import java.util.Arrays;
 public class ArrayQueue<Item> implements IQueue<Item> {
 
     private final Item[] container;
-    private final int size;
+    private final int maxSize;
 
     private int head;
     private int tail;
+    private int size;
 
     public ArrayQueue(int initSize) {
         if (initSize <= 0)
             throw new IllegalArgumentException("Size can not be less than or equal to zero");
 
-        size = initSize;
-        container = (Item[]) new Object[size];
+        maxSize = initSize;
+        container = (Item[]) new Object[maxSize];
         head = -1;
         tail = -1;
+        size = 0;
     }
 
     public int maxSize() {
-        return size;
+        return maxSize;
     }
 
-    public int size() {
-        int count = 0;
-
-        for (Item element : container) {
-            if (element != null)
-                count++;
-        }
-
-        return count;
-    }
+    public int size() { return size; }
 
     @Override
     public boolean isEmpty() {
@@ -45,7 +38,7 @@ public class ArrayQueue<Item> implements IQueue<Item> {
 
     @Override
     public boolean isFull() {
-        return (tail + 1) % size == head;
+        return (tail + 1) % maxSize == head;
     }
 
     @Override
@@ -57,9 +50,11 @@ public class ArrayQueue<Item> implements IQueue<Item> {
             tail++;
             container[tail] = value;
         } else {
-            tail = (tail + 1) % size;
+            tail = (tail + 1) % maxSize;
             container[tail] = value;
         }
+
+        size++;
     }
 
     @Override
@@ -76,9 +71,10 @@ public class ArrayQueue<Item> implements IQueue<Item> {
         } else {
             out = container[head];
             container[head] = null;
-            head = (head + 1) % size;
+            head = (head + 1) % maxSize;
         }
 
+        size--;
         return out;
     }
 
@@ -89,8 +85,15 @@ public class ArrayQueue<Item> implements IQueue<Item> {
         return container[head];
     }
 
+    public Item elementAt(int index) {
+        if (isEmpty())
+            throw new IllegalStateException("Can not peek an empty queue");
+
+        return container[(tail + index) % maxSize];
+    }
+
     public String toString() {
-        return "[head = " + head + ", tail = " + tail + ", queue = " + Arrays.toString(container) + ", size = " + size() + "]";
+        return "[head = " + head + ", tail = " + tail + ", queue = " + Arrays.toString(container) + ", maxSize = " + size() + "]";
     }
 
     public void clear() {
