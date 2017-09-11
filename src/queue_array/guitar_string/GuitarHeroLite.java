@@ -1,10 +1,5 @@
 package queue_array.guitar_string;
 
-import queue_array.ArrayQueue;
-
-import javax.swing.*;
-import java.awt.*;
-
 /*****************************************************************************
  *  Compilation:  javac queue_array.guitar_string.GuitarHeroLite.java
  *  Execution:    java  queue_array.guitar_string.GuitarHeroLite

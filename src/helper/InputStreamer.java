@@ -7,11 +7,11 @@ import java.io.IOException;
 /**
  * Created by Saif on 8/30/17.
  */
-public class Streamer {
+public class InputStreamer {
     private BufferedReader br;
     private FileReader fr;
 
-    public Streamer(String fileName) {
+    public InputStreamer(String fileName) {
         try {
             fr = new FileReader(fileName);
             br = new BufferedReader(fr);

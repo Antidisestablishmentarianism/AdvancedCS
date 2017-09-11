@@ -1,6 +1,6 @@
 package stack_array;
 
-import helper.Streamer;
+import helper.InputStreamer;
 
 /**
  * Created by Saif on 8/29/2017.
@@ -9,13 +9,13 @@ public class Rails {
     //private static final String fileName = "/Users/Saif/Documents/Repositories/projects/src/stack_array/rails";
     private static final String fileName = "C:\\Users\\180502\\Desktop\\AdvancedCS\\src\\stack_array\\rails";
 
-    Streamer streamer;
+    InputStreamer streamer;
 
     ArrayStack<Integer> cars = new ArrayStack<>();
     ArrayStack<Integer> station = new ArrayStack<>();
 
     public Rails() {
-        streamer = new Streamer(fileName);
+        streamer = new InputStreamer(fileName);
 
         String currLine;
 

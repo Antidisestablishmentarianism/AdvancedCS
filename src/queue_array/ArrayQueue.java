@@ -57,6 +57,14 @@ public class ArrayQueue<Item> implements IQueue<Item> {
         size++;
     }
 
+    public void enqueue(Item[] values) {
+        if (size - size() >= values.length)
+            for (int i = 0; i < values.length; i++)
+                enqueue(values[i]);
+        else
+            throw new IllegalStateException("Not enough room in queue");
+    }
+
     @Override
     public Item dequeue() {
         Item out;
