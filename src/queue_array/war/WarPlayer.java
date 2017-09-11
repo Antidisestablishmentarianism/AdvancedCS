@@ -24,7 +24,7 @@ public class WarPlayer {
         while ((currLine = streamer.readLine()) != null) {
             String[] cards = currLine.split(" ");
 
-            for (int i = 0; i <= cards.length; i++) {
+            for (int i = 0; i < cards.length; i++) {
                 if (p == 0)
                     PlayerOne.enqueue(cards[i]);
                 else
