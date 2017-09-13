@@ -7,7 +7,8 @@ import queue_array.ArrayQueue;
  * Created by Saif Ahmad on 9/11/2017.
  */
 public class WarPlayer {
-    private final String fileName = "C:\\Users\\180502\\Desktop\\AdvancedCS\\src\\queue_array\\war\\decks.txt";
+    //private final String fileName = "C:\\Users\\180502\\Desktop\\AdvancedCS\\src\\queue_array\\war\\decks.txt";
+    private final String fileName = "/Users/Saif/Documents/Repositories/AdvancedCS/src/queue_array/war/decks.txt";
 
     private final ArrayQueue<String> PlayerOne = new ArrayQueue<>(52);
     private final ArrayQueue<String> PlayerTwo = new ArrayQueue<>(52);
@@ -46,60 +47,46 @@ public class WarPlayer {
     public void play() {
         int rounds = 0;
 
-        while (PlayerOne.size() < 52 && PlayerTwo.size() < 52 && Play.size() < 52 && rounds++ < 100000) {
+        while (!PlayerOne.isFull() && !PlayerOne.isEmpty() && !PlayerTwo.isFull() && !PlayerTwo.isEmpty() && !Play.isFull() && rounds++ < 100000) {
             Play.enqueue(PlayerOne.dequeue());
             Play.enqueue(PlayerTwo.dequeue());
 
             String a = Play.dequeue();
             String b = Play.dequeue();
 
-            int result = compare(a, b);
-
-            if (result == 1) {
-                PlayerOne.enqueue(a);
-                PlayerOne.enqueue(b);
-            } else if (result == 0) {
-                PlayerTwo.enqueue(a);
-                PlayerTwo.enqueue(b);
-            } else if (result == -1) {
-                war(new String[]{a, b});
-            }
+            compare(a, b);
         }
 
-        if (PlayerOne.size() == 52)
+        if (PlayerOne.isFull() || PlayerTwo.isEmpty())
             System.out.println("Player 1 wins!");
-        else if (PlayerTwo.size() == 52)
+        else if (PlayerTwo.isFull() || PlayerOne.isEmpty())
             System.out.println("Player 2 wins!");
-        else if (Play.size() == 52)
+        else if (Play.isFull())
             System.out.println("Tie game stopped because both players ran out of cards.");
         else if (rounds >= 100000)
             System.out.println("Tie game stopped at 100000 rounds.");
     }
 
-    public void war(String[] cards) {
-        String[] newCards = new String[cards.length + 2];
+    public void war() {
+        Play.enqueue(PlayerOne.dequeue());
+        Play.enqueue(PlayerTwo.dequeue());
 
-        newCards[newCards.length - 2] = PlayerOne.dequeue();
-        newCards[newCards.length - 1] = PlayerTwo.dequeue();
+        String a = PlayerOne.dequeue();
+        String b = PlayerTwo.dequeue();
 
-        int result = compare(newCards[newCards.length - 2], newCards[newCards.length - 1]);
-
-        if (result == 1)
-            PlayerOne.enqueue(newCards);
-        else if (result == 0)
-            PlayerTwo.enqueue(newCards);
-        else if (result == -1)
-            war(newCards);
+        compare(a, b);
     }
 
     /**
      * Returns 1 if the first card has a higher value than the second card, 0 if less, and -1 if equal
      */
-    public int compare(String card1, String card2) {
+    public void compare(String card1, String card2) {
         int a;
         int b;
 
-        if (card1.charAt(0) == 'J')
+        if (card1.charAt(0) == 'T')
+            a = 10;
+        else if (card1.charAt(0) == 'J')
             a = 11;
         else if (card1.charAt(0) == 'Q')
             a = 12;
@@ -110,7 +97,9 @@ public class WarPlayer {
         else
             a = Integer.parseInt(card1.substring(0, 1));
 
-        if (card2.charAt(0) == 'J')
+        if (card2.charAt(0) == 'T')
+            b = 10;
+        else if (card2.charAt(0) == 'J')
             b = 11;
         else if (card2.charAt(0) == 'Q')
             b = 12;
@@ -121,12 +110,14 @@ public class WarPlayer {
         else
             b = Integer.parseInt(card2.substring(0, 1));
 
-        if (a > b)
-            return 1;
-        else if (a < b)
-            return 0;
-        else
-            return -1;
+        if (a > b) {
+            PlayerOne.enqueueAll(new String[] {card1, card2});
+        } else if (a < b) {
+            PlayerTwo.enqueueAll(new String[] {card1, card2});
+        } else if (a == b) {
+            Play.enqueueAll(new String[] {card1, card2});
+            war();
+        }
     }
 
     public static void main(String[] args) {

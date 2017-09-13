@@ -57,8 +57,10 @@ public class ArrayQueue<Item> implements IQueue<Item> {
         size++;
     }
 
-    public void enqueue(Item[] values) {
-        if (size - size() > values.length)
+    public void enqueueAll(Item[] values) {
+        System.out.println(capacity - size +  ", " + values.length);
+        System.out.println(values);
+        if (capacity - size > values.length)
             for (int i = 0; i < values.length; i++)
                 enqueue(values[i]);
         else
@@ -83,6 +85,16 @@ public class ArrayQueue<Item> implements IQueue<Item> {
         }
 
         size--;
+        return out;
+    }
+
+    public Item[] dequeueAll() {
+        Item[] out = (Item[]) (new Object[size]);
+
+        for (int i = 0; i < size; i++) {
+            out[i] = dequeue();
+        }
+
         return out;
     }
 
