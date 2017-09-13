@@ -7,17 +7,15 @@ import queue_array.ArrayQueue;
  * Created by Saif Ahmad on 9/11/2017.
  */
 public class WarPlayer {
-    //private final String fileName = "C:\\Users\\180502\\Desktop\\AdvancedCS\\src\\queue_array\\war\\decks.txt";
-    private final String fileName = "/Users/Saif/Documents/Repositories/AdvancedCS/src/queue_array/war/decks.txt";
+    private final String fileName = "C:\\Users\\180502\\Desktop\\AdvancedCS\\src\\queue_array\\war\\decks.txt";
+    //private final String fileName = "/Users/Saif/Documents/Repositories/AdvancedCS/src/queue_array/war/decks.txt";
 
     private final ArrayQueue<String> PlayerOne = new ArrayQueue<>(52);
     private final ArrayQueue<String> PlayerTwo = new ArrayQueue<>(52);
     private final ArrayQueue<String> Play = new ArrayQueue<>(52);
 
-    private InputStreamer streamer;
-
     public WarPlayer() {
-        streamer = new InputStreamer(fileName);
+        InputStreamer streamer = new InputStreamer(fileName);
 
         String currLine;
         int p = 0;
@@ -25,11 +23,11 @@ public class WarPlayer {
         while ((currLine = streamer.readLine()) != null) {
             String[] cards = currLine.split(" ");
 
-            for (int i = 0; i < cards.length; i++) {
+            for (String card : cards) {
                 if (p == 0)
-                    PlayerOne.enqueue(cards[i]);
+                    PlayerOne.enqueue(card);
                 else
-                    PlayerTwo.enqueue(cards[i]);
+                    PlayerTwo.enqueue(card);
             }
 
             if (++p > 1) {
@@ -44,7 +42,7 @@ public class WarPlayer {
         streamer.closeStream();
     }
 
-    public void play() {
+    private void play() {
         int rounds = 0;
 
         while (!PlayerOne.isFull() && !PlayerOne.isEmpty() && !PlayerTwo.isFull() && !PlayerTwo.isEmpty() && !Play.isFull() && rounds++ < 100000) {
@@ -67,7 +65,7 @@ public class WarPlayer {
             System.out.println("Tie game stopped at 100000 rounds.");
     }
 
-    public void war() {
+    private void war() {
         Play.enqueue(PlayerOne.dequeue());
         Play.enqueue(PlayerTwo.dequeue());
 
@@ -80,7 +78,7 @@ public class WarPlayer {
     /**
      * Returns 1 if the first card has a higher value than the second card, 0 if less, and -1 if equal
      */
-    public void compare(String card1, String card2) {
+    private void compare(String card1, String card2) {
         int a;
         int b;
 

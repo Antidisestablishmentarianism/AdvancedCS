@@ -42,7 +42,7 @@ public class ArrayQueue<Item> implements IQueue<Item> {
     }
 
     @Override
-    public void enqueue(Item value) {
+    public Item enqueue(Item value) {
         if (isFull()) {
             throw new IllegalStateException("Queue is full");
         } else if (isEmpty()) {
@@ -55,16 +55,18 @@ public class ArrayQueue<Item> implements IQueue<Item> {
         }
 
         size++;
+        return value;
     }
 
-    public void enqueueAll(Item[] values) {
+    public Item[] enqueueAll(Item[] values) {
         System.out.println(capacity - size +  ", " + values.length);
-        System.out.println(values);
         if (capacity - size > values.length)
             for (int i = 0; i < values.length; i++)
                 enqueue(values[i]);
         else
             throw new IllegalStateException("Not enough room in queue");
+
+        return values;
     }
 
     @Override

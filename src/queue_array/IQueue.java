@@ -9,7 +9,7 @@ public interface IQueue<Item> {
 
     boolean isFull();
 
-    void enqueue(Item value);
+    Item enqueue(Item value);
 
     Item dequeue();
 
