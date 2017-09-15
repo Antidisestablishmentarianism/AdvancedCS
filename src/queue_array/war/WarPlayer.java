@@ -10,9 +10,9 @@ public class WarPlayer {
     private final String fileName = "C:\\Users\\180502\\Desktop\\AdvancedCS\\src\\queue_array\\war\\decks.txt";
     //private final String fileName = "/Users/Saif/Documents/Repositories/AdvancedCS/src/queue_array/war/decks.txt";
 
-    private final ArrayQueue<String> PlayerOne = new ArrayQueue<>(52);
-    private final ArrayQueue<String> PlayerTwo = new ArrayQueue<>(52);
-    private final ArrayQueue<String> Play = new ArrayQueue<>(52);
+    private final ArrayQueue<String> playerOne = new ArrayQueue<>(52);
+    private final ArrayQueue<String> playerTwo = new ArrayQueue<>(52);
+    private final ArrayQueue<String> table = new ArrayQueue<>(52);
 
     public WarPlayer() {
         InputStreamer streamer = new InputStreamer(fileName);
@@ -25,97 +25,64 @@ public class WarPlayer {
 
             for (String card : cards) {
                 if (p == 0)
-                    PlayerOne.enqueue(card);
+                    playerOne.enqueue(card);
                 else
-                    PlayerTwo.enqueue(card);
+                    playerTwo.enqueue(card);
             }
 
             if (++p > 1) {
                 p = 0;
                 play();
-                PlayerOne.clear();
-                PlayerTwo.clear();
-                Play.clear();
+                playerOne.clear();
+                playerTwo.clear();
+                table.clear();
             }
         }
 
         streamer.closeStream();
     }
 
-    private void play() {
-        int rounds = 0;
+    public void play() {
+        for (int i = 0; i < 100000; i++) {
+            if (value(playerOne.peek()) == value(playerTwo.peek())) {
+                table.enqueue(playerOne.dequeue());
+                table.enqueue(playerTwo.dequeue());
+                table.enqueue(playerOne.dequeue());
+                table.enqueue(playerTwo.dequeue());
+            } else if (value(playerOne.peek()) > value(playerTwo.peek())) {
+                while (!table.isEmpty())
+                    playerOne.enqueue(table.dequeue());
 
-        while (!PlayerOne.isFull() && !PlayerOne.isEmpty() && !PlayerTwo.isFull() && !PlayerTwo.isEmpty() && !Play.isFull() && rounds++ < 100000) {
-            Play.enqueue(PlayerOne.dequeue());
-            Play.enqueue(PlayerTwo.dequeue());
+                playerOne.enqueue(playerOne.dequeue());
+                playerOne.enqueue(playerTwo.dequeue());
+            } else if (value(playerOne.peek()) < value(playerTwo.peek())) {
+                while (!table.isEmpty())
+                    playerTwo.enqueue(table.dequeue());
 
-            String a = Play.dequeue();
-            String b = Play.dequeue();
+                playerTwo.enqueue(playerTwo.dequeue());
+                playerTwo.enqueue(playerOne.dequeue());
+            }
 
-            compare(a, b);
+            if (playerOne.isEmpty())
+                System.out.println("Player 2 wins!");
+            else if (playerTwo.isEmpty())
+                System.out.println("Player 1 wins!");
+            else if (table.isFull())
+                System.out.println("Tie game ended because both players ran out of cards.");
+            else if (i == 99999)
+                System.out.println("Tie game ended because rounds exceeded 100000.");
         }
-
-        if (PlayerOne.isFull() || PlayerTwo.isEmpty())
-            System.out.println("Player 1 wins!");
-        else if (PlayerTwo.isFull() || PlayerOne.isEmpty())
-            System.out.println("Player 2 wins!");
-        else if (Play.isFull())
-            System.out.println("Tie game stopped because both players ran out of cards.");
-        else if (rounds >= 100000)
-            System.out.println("Tie game stopped at 100000 rounds.");
     }
 
-    private void war() {
-        Play.enqueue(PlayerOne.dequeue());
-        Play.enqueue(PlayerTwo.dequeue());
+    public int value(String card) {
+        char first = card.charAt(0);
 
-        String a = PlayerOne.dequeue();
-        String b = PlayerTwo.dequeue();
-
-        compare(a, b);
-    }
-
-    /**
-     * Returns 1 if the first card has a higher value than the second card, 0 if less, and -1 if equal
-     */
-    private void compare(String card1, String card2) {
-        int a;
-        int b;
-
-        if (card1.charAt(0) == 'T')
-            a = 10;
-        else if (card1.charAt(0) == 'J')
-            a = 11;
-        else if (card1.charAt(0) == 'Q')
-            a = 12;
-        else if (card1.charAt(0) == 'K')
-            a = 13;
-        else if (card1.charAt(0) == 'A')
-            a = 14;
-        else
-            a = Integer.parseInt(card1.substring(0, 1));
-
-        if (card2.charAt(0) == 'T')
-            b = 10;
-        else if (card2.charAt(0) == 'J')
-            b = 11;
-        else if (card2.charAt(0) == 'Q')
-            b = 12;
-        else if (card2.charAt(0) == 'K')
-            b = 13;
-        else if (card2.charAt(0) == 'A')
-            b = 14;
-        else
-            b = Integer.parseInt(card2.substring(0, 1));
-
-        if (a > b) {
-            PlayerOne.enqueueAll(new String[] {card1, card2});
-        } else if (a < b) {
-            PlayerTwo.enqueueAll(new String[] {card1, card2});
-        } else if (a == b) {
-            Play.enqueueAll(new String[] {card1, card2});
-            war();
-        }
+        if (first == 'T') return 10;
+        else if (first == 'J') return 11;
+        else if (first == 'Q') return 12;
+        else if (first == 'K') return 13;
+        else if (first == 'A') return 14;
+        else return Integer.parseInt(card.substring(0, 1));
     }
 
     public static void main(String[] args) {
