@@ -1,6 +1,7 @@
 package queue_array.war;
 
 import helper.InputStreamer;
+import queue_array.ArrayQueue;
 
 /**
  * Created by Saif Ahmad on 9/11/2017.
@@ -9,7 +10,7 @@ public class WarPlayer {
     private final String fileName = "C:\\Users\\180502\\Desktop\\AdvancedCS\\src\\queue_array\\war\\decks.txt";
     //private final String fileName = "/Users/Saif/Documents/Repositories/AdvancedCS/src/queue_array/war/decks.txt";
 
-    private final Deck playerOne = new Deck(52);
+    private final Deck playerOne = new Deck( 52);
     private final Deck playerTwo = new Deck(52);
     private final Deck table = new Deck(52);
 

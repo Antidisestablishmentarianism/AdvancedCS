@@ -1,5 +1,7 @@
 package queue_array.guitar_string;
 
+import javax.naming.ldap.Control;
+
 /*****************************************************************************
  *  Compilation:  javac queue_array.guitar_string.GuitarHeroLite.java
  *  Execution:    java  queue_array.guitar_string.GuitarHeroLite
@@ -11,18 +13,28 @@ package queue_array.guitar_string;
  *
  ****************************************************************************/
 
-public class GuitarHeroLite { 
+public class GuitarHeroLite implements Runnable {
 
-    public static void main(String[] args) {
+    String keyboard = "q2we4r5ty7u8i9op-[=zxdcfvgbnjmk,.;/' ";
 
-        String keyboard = "q2we4r5ty7u8i9op-[=zxdcfvgbnjmk,.;/' ";
+    GuitarString[] strings = new GuitarString[keyboard.length()];
 
-        GuitarString[] strings = new GuitarString[keyboard.length()];
+    Thread thread;
 
+    Controller controller;
+
+    public GuitarHeroLite(Controller controller) {
         for (int i = 0; i < strings.length; i++)
             strings[i] = new GuitarString(440 * Math.pow(1.05956, i - 24));
 
-        // the main input loop
+        this.controller = controller;
+
+        thread = new Thread(this, "Guitar Hero");
+        thread.start();
+    }
+
+    @Override
+    public void run() {
         while (true) {
 
             // check if the user has typed a key, and, if so, process it
@@ -46,6 +58,8 @@ public class GuitarHeroLite {
 
             // send the result to standard audio
             StdAudio.play(sample);
+
+            controller.addSample(sample);
 
             // advance the simulation of each guitar string by one step
             for (GuitarString string : strings)
