@@ -14,7 +14,7 @@ public class Controller {
     }
 
     public void addSample(double sample) {
-        v.buffer.add(sample);
+        v.samples.add(sample);
     }
 
     public static void main(String[] args) {
