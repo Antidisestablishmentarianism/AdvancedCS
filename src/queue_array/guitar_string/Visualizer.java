@@ -59,34 +59,28 @@ public class Visualizer extends JComponent implements Runnable {
 
         double middle = frame.getHeight() / 2;
 
-        int lastY;
-        double tempSample;
-
-        try {
-            tempSample = Double.parseDouble(samples.get(0).toString());
-        } catch (NullPointerException e) {
-            tempSample = 0;
-        }
-
-        double tempMult = tempSample * AMPLITUDE;
-        lastY = (int) (tempMult + middle);
+        int lastY = getY(0, middle);
 
         for (int i = 1; i < samples.size(); i += ACCURACY) {
-            double sample;
-
-            try {
-                // Sorry not sorry
-                sample = Double.parseDouble(samples.get(i).toString());
-            } catch (NullPointerException | IndexOutOfBoundsException e) {
-                sample = 0;
-            }
-
-            double mult = sample * AMPLITUDE;
-            int y = (int) (mult + middle);
+            int y = getY(i, middle);
 
             g.drawLine(i - ACCURACY - frame.getWidth(), lastY, i - frame.getWidth(), y);
 
             lastY = y;
         }
+    }
+
+    private int getY(int index, double middle) {
+        double sample;
+
+        try {
+            // Sorry not sorry
+            sample = Double.parseDouble(samples.get(index).toString());
+        } catch (NullPointerException e) {
+            sample = 0;
+        }
+
+        double mult = sample * AMPLITUDE;
+        return (int) (mult + middle);
     }
 }
