@@ -1,7 +1,5 @@
 package queue_array.guitar_string;
 
-import queue_array.ArrayQueue;
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.LinkedList;
@@ -10,7 +8,11 @@ import java.util.LinkedList;
  * Created by Saif on 9/21/2017.
  */
 public class Visualizer extends JComponent implements Runnable {
-    private final int amplitude = 100;
+    private final int INIT_WIDTH = 800, INIT_HEIGHT = 200;
+    private final int AMPLITUDE = INIT_HEIGHT / 2;
+
+    // Lower number = higher accuracy, but may pick up weird artifacts
+    private final int ACCURACY = 3;
 
     JFrame frame;
 
@@ -20,28 +22,32 @@ public class Visualizer extends JComponent implements Runnable {
 
     public Visualizer() {
         frame = new JFrame("Visualizer");
-        frame.setSize(800, 200);
+        frame.setSize(INIT_WIDTH, INIT_HEIGHT);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLocationRelativeTo(null);
         frame.add(this);
 
         samples = new LinkedList<>();
 
         double middle = frame.getHeight() / 2;
-        for (int i = 0; i < frame.getWidth(); i++)
+        for (int i = 0; i < frame.getWidth() * 2; i++)
             samples.add(middle);
 
         thread = new Thread(this, "Visualizer");
         thread.start();
+
+        frame.getContentPane().validate();
+        frame.getContentPane().repaint();
     }
 
     @Override
     public void run() {
         while (true) {
-            for (int i = samples.size(); i > frame.getWidth(); i--)
+            for (int i = samples.size(); i > frame.getWidth() * 2; i--)
                 samples.remove();
 
-            frame.paintComponents(frame.getGraphics());
+            repaint();
         }
     }
 
@@ -54,17 +60,31 @@ public class Visualizer extends JComponent implements Runnable {
         double middle = frame.getHeight() / 2;
 
         int lastY;
-        double tempSample = Double.parseDouble(samples.get(0).toString());
-        double tempMult = tempSample * amplitude;
+        double tempSample;
+
+        try {
+            tempSample = Double.parseDouble(samples.get(0).toString());
+        } catch (NullPointerException e) {
+            tempSample = 0;
+        }
+
+        double tempMult = tempSample * AMPLITUDE;
         lastY = (int) (tempMult + middle);
 
-        for (int i = 1; i < samples.size(); i++) {
-            // I am so sorry
-            double sample = Double.parseDouble(samples.get(i).toString());
-            double mult = sample * amplitude;
+        for (int i = 1; i < samples.size(); i += ACCURACY) {
+            double sample;
+
+            try {
+                // Sorry not sorry
+                sample = Double.parseDouble(samples.get(i).toString());
+            } catch (NullPointerException | IndexOutOfBoundsException e) {
+                sample = 0;
+            }
+
+            double mult = sample * AMPLITUDE;
             int y = (int) (mult + middle);
 
-            g.drawLine(i - 1, lastY, i, y);
+            g.drawLine(i - ACCURACY - frame.getWidth(), lastY, i - frame.getWidth(), y);
 
             lastY = y;
         }

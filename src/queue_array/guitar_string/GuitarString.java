@@ -27,7 +27,7 @@ public class GuitarString {
         buffer.clear();
 
         for (int i = 0; i < buffer.capacity(); i++)
-            buffer.enqueue(Math.random() - 0.5);
+            buffer.enqueue(randomWave());
     }
 
     public void tick() {
@@ -47,5 +47,17 @@ public class GuitarString {
 
     public int time() {
         return time;
+    }
+
+    private double randomWave() {
+        return Math.random() -0.5;
+    }
+
+    private double triangleWave(int i) {
+        return (double) 1 / buffer.capacity() * i - 0.5;
+    }
+
+    private double squareWave(int i) {
+        return Math.signum(Math.sin(buffer.size() / (i + 1))) / 2;
     }
 }
