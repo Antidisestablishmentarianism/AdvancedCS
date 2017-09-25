@@ -60,4 +60,15 @@ public class GuitarString {
     private double squareWave(int i) {
         return Math.signum(Math.sin(buffer.size() / (i + 1))) / 2;
     }
+
+    private double tanWave(int i) {
+        return Math.tan(i);
+    }
+
+    private double cotanWave(int i) {
+        if (Math.sin(i) != 0)
+            return Math.cos(i) / Math.sin(i);
+        else
+            return Math.cos(i);
+    }
 }
