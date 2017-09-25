@@ -3,10 +3,39 @@ package queue_array.guitar_string;
 import queue_array.ArrayQueue;
 
 /**
- * Created by 180502 on 9/5/2017.
+ * Created by Saif on 9/5/2017.
  */
 public class GuitarString {
+
+    /* Sample rates to try:
+        8000
+        11025
+        16000
+        22050
+        32000
+        37800
+        44100 STANDARD
+        47250
+        48000
+        50000
+        54000
+        88200
+        96000
+        176400
+        192000
+        352800
+        2822400
+        5644800
+     */
     private final int SAMPLE_RATE = 44100;
+
+    /* Decay factors to try:
+        0.994 STANDARD
+        0.95
+        1.0
+        0.999
+        0.6 (with higher sample rates)
+     */
     private final double DECAY_FACTOR = 0.994;
     private final ArrayQueue<Double> buffer;
 
@@ -41,6 +70,11 @@ public class GuitarString {
         time++;
     }
 
+    public void clear() {
+        buffer.clear();
+        time = 0;
+    }
+
     public double sample() {
         return buffer.isEmpty() ? 0 : buffer.peek();
     }
@@ -50,7 +84,7 @@ public class GuitarString {
     }
 
     private double randomWave() {
-        return Math.random() -0.5;
+        return Math.random() - 0.5;
     }
 
     private double triangleWave(int i) {

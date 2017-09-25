@@ -2,14 +2,16 @@ package queue_array.guitar_string;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.LinkedList;
 
 /**
  * Created by Saif on 9/21/2017.
  */
-public class Visualizer extends JComponent implements Runnable {
+public class Visualizer extends JComponent implements Runnable, KeyListener {
     private final int INIT_WIDTH = 800, INIT_HEIGHT = 200;
-    private final int AMPLITUDE = INIT_HEIGHT / 2;
+    private final int AMPLITUDE = INIT_HEIGHT * 3 / 4;
 
     // Lower number = higher accuracy, but may pick up weird artifacts
     private final int ACCURACY = 3;
@@ -20,12 +22,20 @@ public class Visualizer extends JComponent implements Runnable {
 
     public LinkedList<Double> samples;
 
-    public Visualizer() {
+    private static Object keyLock = new Object();
+    private static LinkedList<Character> keysTyped = new LinkedList<>();
+
+    Controller controller;
+
+    public Visualizer(Controller controller) {
+        this.controller = controller;
+
         frame = new JFrame("Visualizer");
         frame.setSize(INIT_WIDTH, INIT_HEIGHT);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
+        frame.addKeyListener(this);
         frame.add(this);
 
         samples = new LinkedList<>();
@@ -56,6 +66,8 @@ public class Visualizer extends JComponent implements Runnable {
         super.paintComponent(g);
 
         g.setColor(Color.BLACK);
+        g.fillRect(0, 0, frame.getWidth(), frame.getHeight());
+        g.setColor(Color.WHITE);
 
         double middle = frame.getHeight() / 2;
 
@@ -76,11 +88,40 @@ public class Visualizer extends JComponent implements Runnable {
         try {
             // Sorry not sorry
             sample = Double.parseDouble(samples.get(index).toString());
-        } catch (NullPointerException e) {
+        } catch (NullPointerException | IndexOutOfBoundsException e) {
             sample = 0;
         }
 
-        double mult = sample * AMPLITUDE;
+        double mult = sample * -AMPLITUDE;
         return (int) (mult + middle);
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+        synchronized (keyLock) {
+            keysTyped.addFirst(e.getKeyChar());
+        }
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+
+    }
+
+    public static boolean hasNextKeyTyped() {
+        synchronized (keyLock) {
+            return !keysTyped.isEmpty();
+        }
+    }
+
+    public static char nextKeyTyped() {
+        synchronized (keyLock) {
+            return keysTyped.removeLast();
+        }
     }
 }

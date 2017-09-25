@@ -1,7 +1,7 @@
 package queue_array.guitar_string;
 
 /**
- * Created by 180502 on 9/21/2017.
+ * Created by Saif on 9/21/2017.
  */
 public class Controller {
 
@@ -9,8 +9,8 @@ public class Controller {
     Visualizer v;
 
     public Controller() {
+        v = new Visualizer(this);
         gh = new GuitarHeroLite(this);
-        v = new Visualizer();
     }
 
     public void addSample(double sample) {

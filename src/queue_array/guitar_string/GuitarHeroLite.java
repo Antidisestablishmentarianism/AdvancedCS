@@ -1,7 +1,5 @@
 package queue_array.guitar_string;
 
-import javax.naming.ldap.Control;
-
 /*****************************************************************************
  *  Compilation:  javac queue_array.guitar_string.GuitarHeroLite.java
  *  Execution:    java  queue_array.guitar_string.GuitarHeroLite
@@ -36,20 +34,7 @@ public class GuitarHeroLite implements Runnable {
     @Override
     public void run() {
         while (true) {
-
-            // check if the user has typed a key, and, if so, process it
-            if (StdDraw.hasNextKeyTyped()) {
-
-                // the user types this character
-                char key = StdDraw.nextKeyTyped();
-
-                // Check which index of keyboard was pressed
-                int i = keyboard.indexOf(key);
-
-                // If valid key, play note
-                if (i != -1)
-                    strings[i].pluck();
-            }
+            checkKeys();
 
             // compute the superposition of the samples
             double sample = 0;
@@ -64,6 +49,25 @@ public class GuitarHeroLite implements Runnable {
             // advance the simulation of each guitar string by one step
             for (GuitarString string : strings)
                 string.tick();
+        }
+    }
+
+    private void checkKeys() {
+        // check if the user has typed a key, and, if so, process it
+        if (Visualizer.hasNextKeyTyped()) {
+            // the user types this character
+            char key = Visualizer.nextKeyTyped();
+
+            // Check which index of keyboard was pressed
+            int i = keyboard.indexOf(key);
+
+            // If valid key, play note
+            if (i != -1)
+                strings[i].pluck();
+                // Press enter to reset
+            else if (key == '\n')
+                for (GuitarString g : strings)
+                    g.clear();
         }
     }
 }
