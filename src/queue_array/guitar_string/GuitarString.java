@@ -36,7 +36,7 @@ public class GuitarString {
         0.999
         0.6 (with higher sample rates)
      */
-    private final double DECAY_FACTOR = 0.994;
+    private final double DECAY_FACTOR = 1.0;
     private final ArrayQueue<Double> buffer;
 
     private int time = 0;

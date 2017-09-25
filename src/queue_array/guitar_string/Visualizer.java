@@ -73,7 +73,7 @@ public class Visualizer extends JComponent implements Runnable, KeyListener {
 
         int lastY = getY(0, middle);
 
-        for (int i = 1; i < samples.size(); i += ACCURACY) {
+        for (int i = ACCURACY; i < samples.size(); i += ACCURACY) {
             int y = getY(i, middle);
 
             g.drawLine(i - ACCURACY - frame.getWidth(), lastY, i - frame.getWidth(), y);
