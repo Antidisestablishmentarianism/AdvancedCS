@@ -36,7 +36,7 @@ public class GuitarString {
         0.999
         0.6 (with higher sample rates)
      */
-    private final double DECAY_FACTOR = 1.0;
+    private final double DECAY_FACTOR = 0.994;
     private final ArrayQueue<Double> buffer;
 
     private int time = 0;
@@ -65,7 +65,7 @@ public class GuitarString {
         double a = buffer.dequeue();
         double b = buffer.peek();
 
-        buffer.enqueue((a + b) / 2 * DECAY_FACTOR);
+        buffer.enqueue(karplusStrong(a, b));
 
         time++;
     }
@@ -81,6 +81,14 @@ public class GuitarString {
 
     public int time() {
         return time;
+    }
+
+    public double karplusStrong(double a, double b) {
+        return (a + b) / 2 * DECAY_FACTOR;
+    }
+
+    public double subtract(double a, double b) {
+        return (Math.max(a, b) - Math.min(a, b)) * DECAY_FACTOR;
     }
 
     private double randomWave() {

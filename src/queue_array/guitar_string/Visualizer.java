@@ -5,12 +5,13 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.LinkedList;
+import java.util.NoSuchElementException;
 
 /**
  * Created by Saif on 9/21/2017.
  */
 public class Visualizer extends JComponent implements Runnable, KeyListener {
-    private final int INIT_WIDTH = 800, INIT_HEIGHT = 200;
+    private final int INIT_WIDTH = 1280, INIT_HEIGHT = 720;
     private final int AMPLITUDE = INIT_HEIGHT * 3 / 4;
 
     // Lower number = higher accuracy, but may pick up weird artifacts
@@ -40,9 +41,8 @@ public class Visualizer extends JComponent implements Runnable, KeyListener {
 
         samples = new LinkedList<>();
 
-        double middle = frame.getHeight() / 2;
         for (int i = 0; i < frame.getWidth() * 2; i++)
-            samples.add(middle);
+            samples.add(0.0);
 
         thread = new Thread(this, "Visualizer");
         thread.start();
@@ -55,7 +55,13 @@ public class Visualizer extends JComponent implements Runnable, KeyListener {
     public void run() {
         while (true) {
             for (int i = samples.size(); i > frame.getWidth() * 2; i--)
-                samples.remove();
+                try {
+                    samples.remove();
+                } catch (NoSuchElementException e) {
+                    for (int y = samples.size(); y < frame.getWidth() * 2; y++) {
+                        samples.add(0.0);
+                    }
+                }
 
             repaint();
         }
