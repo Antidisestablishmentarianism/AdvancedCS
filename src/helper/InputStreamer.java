@@ -20,6 +20,15 @@ public class InputStreamer {
         }
     }
 
+    public void setFile(String file) {
+        try {
+            fr = new FileReader(file);
+            br = new BufferedReader(fr);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public String readLine() {
         try {
             return br.readLine();
@@ -28,6 +37,15 @@ public class InputStreamer {
         }
 
         return null;
+    }
+
+    public boolean hasNext() {
+        try {
+            return br.ready();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public void closeStream() {

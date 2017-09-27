@@ -1,33 +1,58 @@
 package linked_list;
 
-import java.util.NoSuchElementException;
-
 /**
- * Created by Saif on 9/25/2017.
+ * Created by Saif on 9/27/2017.
  */
-public class CLinkedList<Item> {
-
-    private Node<Item> head, tail;
+public class CLinkedList<T> {
+    private Node<T> head;
+    private int count;
 
     public CLinkedList() {
         head = null;
-        tail = null;
+        count = 0;
     }
 
-    public void add(Node value) {
+    public void add(T data) {
+        add(new Node<>(data));
+    }
+
+    public void add(Node<T> value) {
         if (head == null) {
-            head = tail.setPrev(value);
-            head.setNext(tail);
+            head = value;
         } else {
-            tail.setPrev(tail);
-            tail = tail.setNext(value);
-            tail.setNext(null);
+            value.setNext(head);
+            head = value;
         }
+
+        count++;
     }
 
-    public Node<Item> remove() {
-        if (head == null) throw new NoSuchElementException("No element ro remove");
-        // TODO: Implement
-        return null;
+    public Node get(int index) {
+        Node curr = head;
+
+        for (int i = 0; i < index; i++) {
+            curr = curr.getNext();
+            if (curr == null) break;
+        }
+
+        return curr;
+    }
+
+    public int size() {
+        return count;
+    }
+
+    public String toString() {
+        String out = "[";
+
+        Node<T> curr = head;
+        out += curr.getData() + ", ";
+
+        for (int i = 0; i < size() - 1; i++) {
+            curr = curr.getNext();
+            out += curr.getData() + (i < size() - 2 ? ", " : "]");
+        }
+
+        return out;
     }
 }
