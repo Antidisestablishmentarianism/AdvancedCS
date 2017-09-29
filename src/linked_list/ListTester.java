@@ -9,7 +9,7 @@ public class ListTester {
     public static void main(String[] args) {
         CLinkedList actors = new CLinkedList();
 
-        InputStreamer streamer = new InputStreamer("C:\\Users\\180502\\Desktop\\AdvancedCS\\src\\linked_list\\actors.txt");
+        InputStreamer streamer = new InputStreamer("actors.txt");
 
         while (streamer.hasNext()) {
             actors.add(new Actor(streamer.readLine().trim()));
@@ -17,8 +17,8 @@ public class ListTester {
 
         System.out.println(actors);
 
-        CLinkedList<Movie> movies = new CLinkedList<>();
-        streamer.setFile("C:\\Users\\180502\\Desktop\\AdvancedCS\\src\\linked_list\\movies.txt");
+        /*CLinkedList<Movie> movies = new CLinkedList<>();
+        streamer.setFile("movies.txt");
 
         while (streamer.hasNext()) {
             // TODO: parse movie file
@@ -27,6 +27,8 @@ public class ListTester {
 
         }
 
-        System.out.println(movies);
+        System.out.println(movies);*/
+
+        streamer.closeStream();
     }
 }
