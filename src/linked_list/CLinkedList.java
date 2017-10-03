@@ -12,6 +12,11 @@ public class CLinkedList<T> {
         count = 0;
     }
 
+    public CLinkedList(T[] data) {
+        for (int i = 0; i < data.length; i++)
+            add(data[i]);
+    }
+
     public void add(T data) {
         add(new Node<>(data));
     }
@@ -45,8 +50,18 @@ public class CLinkedList<T> {
     public String toString() {
         String out = "[";
 
-        Node<T> curr = head;
-        out += curr.getData() + ", ";
+        Node<T> curr;
+
+        if (head != null)
+            curr = head;
+        else
+            return "[]";
+
+        out += curr.getData();
+
+        if (count == 1) return out + "]";
+
+        out += ", ";
 
         for (int i = 0; i < size() - 1; i++) {
             curr = curr.getNext();

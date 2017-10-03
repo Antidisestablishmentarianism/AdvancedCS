@@ -7,7 +7,7 @@ import helper.InputStreamer;
  */
 public class ListTester {
     public static void main(String[] args) {
-        CLinkedList actors = new CLinkedList();
+        CLinkedList<Actor> actors = new CLinkedList<Actor>();
 
         InputStreamer streamer = new InputStreamer("actors.txt");
 
@@ -15,19 +15,31 @@ public class ListTester {
             actors.add(new Actor(streamer.readLine().trim()));
         }
 
-        System.out.println(actors);
 
-        /*CLinkedList<Movie> movies = new CLinkedList<>();
+        CLinkedList<Movie> movies = new CLinkedList<>();
         streamer.setFile("movies.txt");
 
         while (streamer.hasNext()) {
             // TODO: parse movie file
             String line = streamer.readLine();
 
+            int date = Integer.parseInt(line.substring(0, 4));
+            String title = line.substring(4, 36).trim();
+            String actorsLine = line.substring(38, 85).trim();
+            String[] actorsList = actorsLine.split(", ");
+            String dirLine = line.substring(90).trim();
+            String[] dirList = dirLine.split(", ");
 
+            CLinkedList actorLinkedList = new CLinkedList();
+            for (int i = 0; i < actorsList.length; i++)
+                actorLinkedList.add(actorsList[i]);
+
+            CLinkedList dirLinkedList = new CLinkedList();
+            for (int i = 0; i < dirList.length; i++)
+                dirLinkedList.add(dirList[i]);
+
+            movies.add(new Movie(date, title, actorLinkedList, dirLinkedList));
         }
-
-        System.out.println(movies);*/
 
         streamer.closeStream();
     }

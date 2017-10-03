@@ -53,6 +53,13 @@ public class Movie {
     }
 
     public String toString() {
-        return title;
+        String out = "";
+
+        out += "\nDate: " + date + ",\n";
+        out += "Title: " + title + ",\n";
+        out += "Actors: " + actors + ",\n";
+        out += "Directors: " + directors + "\n";
+
+        return out;
     }
 }
