@@ -41,6 +41,10 @@ public class ListTester {
             movies.add(new Movie(date, title, actorLinkedList, dirLinkedList));
         }
 
+        IMDb imdb = new IMDb(actors, movies);
+
+        System.out.println(imdb.match());
+
         streamer.closeStream();
     }
 }

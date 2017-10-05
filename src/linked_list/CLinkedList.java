@@ -43,6 +43,33 @@ public class CLinkedList<T> {
         return curr;
     }
 
+    public boolean contains(T value) {
+        Node curr = head;
+
+        for (int i = 0; i < size(); i++) {
+            if (curr == value) return true;
+
+            curr = curr.getNext();
+        }
+
+        if (curr == value) return true;
+
+        return false;
+    }
+
+    public boolean containsString(String value) {
+        Node curr = head;
+
+        for (int i = 0; i < size(); i++) {
+            if (curr.getData().toString().equals(value))
+                return true;
+
+            curr = curr.getNext();
+        }
+
+        return false;
+    }
+
     public int size() {
         return count;
     }
