@@ -1,4 +1,4 @@
-package linked_list;
+package linked_list.IMDb;
 
 /**
  * Created by Saif on 9/27/2017.

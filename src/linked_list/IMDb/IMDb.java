@@ -1,6 +1,4 @@
-package linked_list;
-
-import java.util.Arrays;
+package linked_list.IMDb;
 
 /**
  * Created by Saif on 10/3/2017.
