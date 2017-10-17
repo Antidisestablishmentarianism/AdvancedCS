@@ -9,9 +9,7 @@ public class WordNode {
 	private WordNode next, prev;
 
 	public WordNode() {
-		data = null;
-		next = null;
-		prev = null;
+		this(null);
 	}
 
 	public WordNode(String data) {
