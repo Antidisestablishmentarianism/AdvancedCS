@@ -61,7 +61,7 @@ public class StackList {
 	public WordNode get(int index) {
 		WordNode curr = head;
 
-		for (int i = 0; i < count; i++)
+		for (int i = 0; i < index; i++)
 			curr = curr.getNext();
 
 		return curr;
