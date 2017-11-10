@@ -5,7 +5,7 @@ package hash_table;
  */
 public class HashTable<k, v> {
     private Node<k, v>[] container;
-    int size;
+    private int size;
 
     public HashTable(int initCap) {
         container = new Node[initCap];
@@ -74,8 +74,16 @@ public class HashTable<k, v> {
         return null;
     }
 
+    public int capacity() {
+        return container.length;
+    }
+
+    public int size() {
+        return size;
+    }
+
     private int getIndex(k key) {
-        return key.hashCode() % container.length;
+        return Math.abs(key.hashCode()) % container.length;
     }
 
     public String toString() {
