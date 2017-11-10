@@ -11,10 +11,14 @@ public class HashTest {
     public static void main(String[] args) {
         Scanner in;
 
-        double desiredDensity = 0.67;
+        double desiredDensity = 0.5;
         int load = 10120;
+        long start = System.currentTimeMillis();
         HashTable<String, Long> table = new HashTable<>(nextPrime((int)(load * (1 / desiredDensity))));
+        long end = System.currentTimeMillis();
+        long elapsed = end - start;
         System.out.println("Table size: " + table.capacity());
+        System.out.println("Table creation time: " + elapsed + " ms");
 
         try {
             in = new Scanner(new File("build.txt"));
@@ -23,14 +27,14 @@ public class HashTest {
             e.printStackTrace();
         }
 
-        long start = System.currentTimeMillis();
+        start = System.currentTimeMillis();
         while (in.hasNext()) {
             String line = in.nextLine();
             String[] parts = line.split(" ");
             table.put(parts[0], Long.parseLong(parts[1]));
         }
-        long end = System.currentTimeMillis();
-        long elapsed = end - start;
+        end = System.currentTimeMillis();
+        elapsed = end - start;
         System.out.println("Build time: " + elapsed + " ms");
 
         try {
