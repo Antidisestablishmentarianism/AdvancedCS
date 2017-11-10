@@ -69,8 +69,11 @@ public class HashTest {
     }
 
     public static int nextPrime(int n) {
-        while (!isPrime(n) && n < Integer.MAX_VALUE - 1)
+        if (n % 2 == 0)
             n++;
+
+        while (!isPrime(n) && n < Integer.MAX_VALUE - 1)
+            n += 2;
 
         return n;
     }
