@@ -40,6 +40,7 @@ public class HashTable<k, v> {
                     return container[count].set(key, value);
                 }
 
+                HashTest.probes++;
                 count = (count + 1) % container.length;
             }
         }
@@ -67,6 +68,7 @@ public class HashTable<k, v> {
                 if (!container[count].removed())
                     return null;
 
+                HashTest.probes++;
                 count = (count + 1) % container.length;
             }
         }
@@ -95,9 +97,7 @@ public class HashTable<k, v> {
             if (node.removed()) {
                 out += "[removed]" + (i == container.length - 1 ? "" : ", ");
                 continue;
-            }
-
-            if (node != null) {
+            } else {
                 out += "[" + i + ", " + container[i].getKey() + ", " + container[i].getValue() + "]";
 
                 if (i != container.length - 1)

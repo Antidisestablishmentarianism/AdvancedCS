@@ -2,74 +2,120 @@ package hash_table;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
  * Created by Saif on 11/2/2017.
  */
 public class HashTest {
+    public static int probes = 0;
+
     public static void main(String[] args) {
         Scanner in;
 
-        double desiredDensity = 0.5;
-        int load = 10120;
-        long start = System.currentTimeMillis();
-        HashTable<String, Long> table = new HashTable<>(nextPrime((int)(load * (1 / desiredDensity))));
-        long end = System.currentTimeMillis();
-        long elapsed = end - start;
-        System.out.println("Table size: " + table.capacity());
-        System.out.println("Table creation time: " + elapsed + " ms");
+        double desiredDensity = 0.05;
+        double increment = 0.05;
+        int trials = 10;
 
-        try {
-            in = new Scanner(new File("build.txt"));
-        } catch (FileNotFoundException e) {
-            in = new Scanner(System.in);
-            e.printStackTrace();
-        }
+        while (desiredDensity <= 1) {
+            ArrayList<Long> builds = new ArrayList<>();
+            ArrayList<Long> creation = new ArrayList<>();
+            ArrayList<Long> success = new ArrayList<>();
+            ArrayList<Long> unsuccess = new ArrayList<>();
 
-        start = System.currentTimeMillis();
-        while (in.hasNext()) {
-            String line = in.nextLine();
-            String[] parts = line.split(" ");
-            table.put(parts[0], Long.parseLong(parts[1]));
-        }
-        end = System.currentTimeMillis();
-        elapsed = end - start;
-        System.out.println("Build time: " + elapsed + " ms");
+            ArrayList<Integer> buildProbes = new ArrayList<>();
+            ArrayList<Integer> successProbes = new ArrayList<>();
+            ArrayList<Integer> unsuccessProbes = new ArrayList<>();
 
-        try {
-            in = new Scanner(new File("successful.txt"));
-        } catch (FileNotFoundException e) {
-            in = new Scanner(System.in);
-            e.printStackTrace();
-        }
+            System.out.println("Density: " + desiredDensity);
 
-        start = System.currentTimeMillis();
-        while (in.hasNext()) {
-            String line = in.nextLine();
-            String[] parts = line.split(" ");
-            table.get(parts[0]);
-        }
-        end = System.currentTimeMillis();
-        elapsed = end - start;
-        System.out.println("Success time: " + elapsed + " ms");
+            for (int i = 0; i < trials; i++) {
+                int load = 50000;
+                long start = System.currentTimeMillis();
+                HashTable<Integer, String> table = new HashTable<>(nextPrime((int) (load * (1 / desiredDensity))));
+                long end = System.currentTimeMillis();
+                long elapsed = end - start;
 
-        try {
-            in = new Scanner(new File("unsuccessful.txt"));
-        } catch (FileNotFoundException e) {
-            in = new Scanner(System.in);
-            e.printStackTrace();
-        }
+                creation.add(elapsed);
 
-        start = System.currentTimeMillis();
-        while (in.hasNext()) {
-            String line = in.nextLine();
-            String[] parts = line.split(" ");
-            table.get(parts[0]);
+                if (i == 0)
+                System.out.println("Table size: " + table.capacity());
+
+                try {
+                    in = new Scanner(new File("Large Data Set.txt"));
+                } catch (FileNotFoundException e) {
+                    in = new Scanner(System.in);
+                    e.printStackTrace();
+                }
+
+                probes = 0;
+                start = System.currentTimeMillis();
+                while (in.hasNext()) {
+                    String line = in.nextLine();
+                    String[] parts = line.split(" ");
+                    table.put(Integer.parseInt(parts[0]), parts[1]);
+                }
+                end = System.currentTimeMillis();
+                elapsed = end - start;
+                builds.add(elapsed);
+                buildProbes.add(probes);
+
+                try {
+                    in = new Scanner(new File("Successful Search.txt"));
+                } catch (FileNotFoundException e) {
+                    in = new Scanner(System.in);
+                    e.printStackTrace();
+                }
+
+                probes = 0;
+                start = System.currentTimeMillis();
+                while (in.hasNext()) {
+                    String line = in.nextLine();
+                    String[] parts = line.split(" ");
+                    table.get(Integer.parseInt(parts[0]));
+                }
+                end = System.currentTimeMillis();
+                elapsed = end - start;
+                success.add(elapsed);
+                successProbes.add(probes);
+
+                try {
+                    in = new Scanner(new File("Unsuccessful Search.txt"));
+                } catch (FileNotFoundException e) {
+                    in = new Scanner(System.in);
+                    e.printStackTrace();
+                }
+
+                probes = 0;
+                start = System.currentTimeMillis();
+                while (in.hasNext()) {
+                    String line = in.nextLine();
+                    String[] parts = line.split(" ");
+                    table.get(Integer.parseInt(parts[0]));
+                }
+                end = System.currentTimeMillis();
+                elapsed = end - start;
+                unsuccess.add(elapsed);
+                unsuccessProbes.add(probes);
+            }
+
+            System.out.println("Average creation time: " + creation.stream().mapToLong(n -> n).sum() / creation.size());
+
+            System.out.println("Average build time: " + builds.stream().mapToLong(n -> n).sum() / builds.size());
+            System.out.println("Average build probes: " + buildProbes.stream().mapToLong(n -> n).sum() / buildProbes.size());
+
+            System.out.println("Average successful time: " + success.stream().mapToLong(n -> n).sum() / success.size());
+            System.out.println("Average successful probes: " + successProbes.stream().mapToLong(n -> n).sum() / successProbes.size());
+
+            System.out.println("Average unsuccessful time: " + unsuccess.stream().mapToLong(n -> n).sum() / unsuccess.size());
+            System.out.println("Average unsuccessful probes: " + unsuccessProbes.stream().mapToLong(n -> n).sum() / unsuccessProbes.size());
+
+            System.out.println();
+
+            desiredDensity += increment;
         }
-        end = System.currentTimeMillis();
-        elapsed = end - start;
-        System.out.println("Unsuccessful time: " + elapsed + " ms");
     }
 
     public static int nextPrime(int n) {
