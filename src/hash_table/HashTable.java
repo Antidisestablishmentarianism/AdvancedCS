@@ -65,7 +65,7 @@ public class HashTable<k, v> {
                 if (container[count] == key)
                     return container[count].getValue();
 
-                if (!container[count].removed())
+                if (container[count].removed())
                     return null;
 
                 HashTest.probes++;
