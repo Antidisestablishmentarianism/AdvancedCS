@@ -20,9 +20,9 @@ public class HashTest {
 
         builder.append("Density, Table size, Creation time, Build read time, Build time, Build probes, Successful read time, Successful time, Successful probes, Unsuccessful read time, Unsuccessful time, Unsuccessful probes\n");
 
-        double desiredDensity = 0.55;
+        double desiredDensity = 0.05;
         double increment = 0.05;
-        int trials = 1;
+        int trials = 10;
 
         while (desiredDensity <= 1) {
             ArrayList<Long> creation = new ArrayList<>();
@@ -40,7 +40,7 @@ public class HashTest {
 
             builder.append(desiredDensity + ",");
 
-            for (int i = 0; i < trials; i++) {
+            for (int i = 1; i <= trials; i++) {
                 int load = 500000;
                 long start = System.currentTimeMillis();
                 HashTableQuad<Integer, String> table = new HashTableQuad<>(nextPrime((int) (load * (1 / desiredDensity))));
@@ -51,7 +51,7 @@ public class HashTest {
                 ArrayList<Integer> ints = new ArrayList<>();
                 ArrayList<String> names = new ArrayList<>();
 
-                if (i == 0)
+                if (i == 1)
                     builder.append(table.capacity() + ",");
 
                 in = new Scanner(new File("Large Data Set.txt"));
@@ -76,7 +76,7 @@ public class HashTest {
                 elapsed = end - start;
                 builds.add(elapsed);
                 buildProbes.add(probes / 50000.0);
-                System.out.println("Finish build " + i);
+                System.out.println("Finish build " + i + " of " + trials + " for " + desiredDensity);
 
                 in = new Scanner(new File("Successful Search.txt"));
                 ints.clear();
@@ -101,7 +101,7 @@ public class HashTest {
                 elapsed = end - start;
                 success.add(elapsed);
                 successProbes.add(probes / 1000.0);
-                System.out.println("Finish successful " + i);
+                System.out.println("Finish successful " + i + " of " + trials + " for " + desiredDensity);
 
                 in = new Scanner(new File("Unsuccessful Search.txt"));
                 ints.clear();
@@ -125,7 +125,7 @@ public class HashTest {
                 elapsed = end - start;
                 unsuccess.add(elapsed);
                 unsuccessProbes.add(probes / 1000.0);
-                System.out.println("Finish unsuccessful " + i);
+                System.out.println("Finish unsuccessful " + i + " of " + trials + " for " + desiredDensity);
             }
 
             builder.append(creation.stream().mapToLong(n -> n).sum() / creation.size() + ",");

@@ -1,13 +1,15 @@
 package hash_table;
 
 /**
- * Created by Saif on 11/2/2017.
+ * Created by Saif on 12/1/2017.
  */
-public class HashTable<k, v> {
+public class HashTableQuad<k, v> {
+    private static final int maxIterations = 200;
+
     private Node<k, v>[] container;
     private int size;
 
-    public HashTable(int initCap) {
+    public HashTableQuad(int initCap) {
         container = new Node[initCap];
         size = 0;
 
@@ -15,13 +17,15 @@ public class HashTable<k, v> {
             container[i] = new Node<>();
     }
 
-    public HashTable() {
+    public HashTableQuad() {
         this(101);
     }
 
     public v put(k key, v value) {
         int index = getIndex(key);
         int count = (index + 1) % container.length;
+        int skip = 2;
+        int iterations = 0;
 
         if (size >= container.length) return null;
 
@@ -40,8 +44,11 @@ public class HashTable<k, v> {
                     return container[count].set(key, value);
                 }
 
+                if (++iterations > maxIterations) return null;
+
                 HashTest.probes++;
-                count = (count + 1) % container.length;
+                count = Math.abs((count + skip)) % container.length;
+                skip *= 2;
             }
         }
 
@@ -51,6 +58,8 @@ public class HashTable<k, v> {
     public v remove(k key) {
         int index = getIndex(key);
         int count = (index + 1) % container.length;
+        int skip = 2;
+        int iterations = 0;
 
         if (key == null) return null;
 
@@ -58,14 +67,18 @@ public class HashTable<k, v> {
             return container[index].getValue();
         } else {
             while (count != index) {
+
                 if (container[count] == key)
                     return container[count].remove();
 
                 if (container[count].removed())
                     return null;
 
+                if (++iterations > maxIterations) return null;
+
                 HashTest.probes++;
-                count = (count + 1) % container.length;
+                count = Math.abs((count + skip)) % container.length;
+                skip *= 2;
             }
         }
 
@@ -75,6 +88,8 @@ public class HashTable<k, v> {
     public v get(k key) {
         int index = getIndex(key);
         int count = (index + 1) % container.length;
+        int skip = 2;
+        int iterations = 0;
 
         if (key == null) return null;
 
@@ -82,14 +97,18 @@ public class HashTable<k, v> {
             return container[index].getValue();
         } else {
             while (count != index) {
+
                 if (container[count] == key)
                     return container[count].getValue();
 
                 if (container[count].removed())
                     return null;
 
+                if (++iterations > maxIterations) return null;
+
                 HashTest.probes++;
-                count = (count + 1) % container.length;
+                count = Math.abs((count + skip)) % container.length;
+                skip *= 2;
             }
         }
 
