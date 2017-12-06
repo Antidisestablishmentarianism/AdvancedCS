@@ -6,7 +6,7 @@ import helper.InputStreamer;
  * Created by Saif on 8/29/2017.
  */
 public class Rails {
-    private static final String fileName = "rails";
+    private static final String fileName = "text_files/rails";
 
     InputStreamer streamer;
 

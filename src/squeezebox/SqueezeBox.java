@@ -1,6 +1,5 @@
 package squeezebox;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
 
@@ -12,19 +11,8 @@ public class SqueezeBox {
     ArrayList<ArrayDeque<String>> piles;
     String[] cards;
 
-    public void run() {
-        Scanner in = new Scanner(System.in);
-
-        try {
-            in = new Scanner(new File("squeezebox.dat"));
-        } catch(FileNotFoundException e) {
-            try {
-                in = new Scanner(SqueezeBox.class.getResourceAsStream("squeezebox.dat"));
-            } catch(NullPointerException o) {
-                e.printStackTrace();
-                o.printStackTrace();
-            }
-        }
+    public void run() throws FileNotFoundException {
+        Scanner in = new Scanner(SqueezeBox.class.getResourceAsStream("text_files/squeezebox.dat"));
 
         while (in.hasNext()) {
             piles = new ArrayList<>();
@@ -103,6 +91,10 @@ public class SqueezeBox {
     }
 
     public static void main(String[] args) {
-        new SqueezeBox().run();
+        try {
+            new SqueezeBox().run();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }

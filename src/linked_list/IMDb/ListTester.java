@@ -9,7 +9,7 @@ public class ListTester {
     public static void main(String[] args) {
         CLinkedList<Actor> actors = new CLinkedList<Actor>();
 
-        InputStreamer streamer = new InputStreamer("actors.txt");
+        InputStreamer streamer = new InputStreamer("text_files/actors.txt");
 
         while (streamer.hasNext()) {
             actors.add(new Actor(streamer.readLine().trim()));

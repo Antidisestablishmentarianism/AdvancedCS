@@ -54,7 +54,7 @@ public class HashTest {
                 if (i == 1)
                     builder.append(table.capacity() + ",");
 
-                in = new Scanner(new File("Large Data Set.txt"));
+                in = new Scanner(new File("text_files/Large Data Set.txt"));
 
                 start = System.currentTimeMillis();
                 while (in.hasNext()) {
@@ -78,7 +78,7 @@ public class HashTest {
                 buildProbes.add(probes / 50000.0);
                 System.out.println("Finish build " + i + " of " + trials + " for " + desiredDensity);
 
-                in = new Scanner(new File("Successful Search.txt"));
+                in = new Scanner(new File("text_files/Successful Search.txt"));
                 ints.clear();
                 names.clear();
 
@@ -103,7 +103,7 @@ public class HashTest {
                 successProbes.add(probes / 1000.0);
                 System.out.println("Finish successful " + i + " of " + trials + " for " + desiredDensity);
 
-                in = new Scanner(new File("Unsuccessful Search.txt"));
+                in = new Scanner(new File("text_files/Unsuccessful Search.txt"));
                 ints.clear();
 
                 start = System.currentTimeMillis();
