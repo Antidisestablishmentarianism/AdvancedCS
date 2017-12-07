@@ -3,8 +3,11 @@ package hash_table;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
+import java.util.stream.IntStream;
 
 /**
  * Created by Saif on 11/2/2017.
@@ -20,6 +23,10 @@ public class HashTest {
 
         builder.append("Density,Table size,Creation time,Build time,Build probes,Successful time,Successful probes,Unsuccessful time,Unsuccessful probes\n");
 
+        int load = 500000;
+        int testSuccess = 10000;
+        int testUnsuccess = 10000;
+
         double desiredDensity = 0.05;
         double increment = 0.05;
         int trials = 10;
@@ -29,7 +36,7 @@ public class HashTest {
         ArrayList<Integer> intsSucc = new ArrayList<>();
         ArrayList<Integer> intsUnsucc = new ArrayList<>();
 
-        in = new Scanner(new File("text_files/Large Data Set.txt"));
+        in = new Scanner(new File("text_files/hash_table_test/Large Data Set.txt"));
         while (in.hasNext()) {
             String line = in.nextLine();
             String[] parts = line.split(" ");
@@ -37,14 +44,14 @@ public class HashTest {
             namesLarge.add(parts[1] + parts[2]);
         }
 
-        in = new Scanner(new File("text_files/Successful Search.txt"));
+        in = new Scanner(new File("text_files/hash_table_test/Successful Search.txt"));
         while (in.hasNext()) {
             String line = in.nextLine();
             String[] parts = line.split(" ");
             intsSucc.add(Integer.parseInt(parts[0]));
         }
 
-        in = new Scanner(new File("text_files/Unsuccessful Search.txt"));
+        in = new Scanner(new File("text_files/hash_table_test/Unsuccessful Search.txt"));
         while (in.hasNext()) {
             String line = in.nextLine();
             String[] parts = line.split(" ");
@@ -65,7 +72,6 @@ public class HashTest {
             builder.append(desiredDensity).append(",");
 
             for (int i = 1; i <= trials; i++) {
-                int load = 500000;
                 long start = System.currentTimeMillis();
                 HashTableQuad<Integer, String> table = new HashTableQuad<>(nextPrime((int) (load * (1 / desiredDensity))));
                 long end = System.currentTimeMillis();
@@ -83,7 +89,7 @@ public class HashTest {
                 end = System.currentTimeMillis();
                 elapsed = end - start;
                 builds.add(elapsed);
-                buildProbes.add(probes / 50000.0);
+                buildProbes.add(probes / (double)load);
                 System.out.println("Finish build " + i + " of " + trials + " for " + desiredDensity);
 
 
@@ -96,7 +102,7 @@ public class HashTest {
                 end = System.currentTimeMillis();
                 elapsed = end - start;
                 success.add(elapsed);
-                successProbes.add(probes / 1000.0);
+                successProbes.add(probes / (double)testSuccess);
                 System.out.println("Finish successful " + i + " of " + trials + " for " + desiredDensity);
 
 
@@ -109,7 +115,7 @@ public class HashTest {
                 end = System.currentTimeMillis();
                 elapsed = end - start;
                 unsuccess.add(elapsed);
-                unsuccessProbes.add(probes / 1000.0);
+                unsuccessProbes.add(probes / (double)testUnsuccess);
                 System.out.println("Finish unsuccessful " + i + " of " + trials + " for " + desiredDensity);
             }
 
