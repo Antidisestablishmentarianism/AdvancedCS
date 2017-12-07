@@ -18,17 +18,41 @@ public class HashTest {
         PrintWriter writer = new PrintWriter(new File("hashtest.csv"));
         StringBuilder builder = new StringBuilder();
 
-        builder.append("Density, Table size, Creation time, Build read time, Build time, Build probes, Successful read time, Successful time, Successful probes, Unsuccessful read time, Unsuccessful time, Unsuccessful probes\n");
+        builder.append("Density,Table size,Creation time,Build time,Build probes,Successful time,Successful probes,Unsuccessful time,Unsuccessful probes\n");
 
         double desiredDensity = 0.05;
         double increment = 0.05;
         int trials = 10;
 
+        ArrayList<Integer> intsLarge = new ArrayList<>();
+        ArrayList<String> namesLarge = new ArrayList<>();
+        ArrayList<Integer> intsSucc = new ArrayList<>();
+        ArrayList<Integer> intsUnsucc = new ArrayList<>();
+
+        in = new Scanner(new File("text_files/Large Data Set.txt"));
+        while (in.hasNext()) {
+            String line = in.nextLine();
+            String[] parts = line.split(" ");
+            intsLarge.add(Integer.parseInt(parts[0]));
+            namesLarge.add(parts[1] + parts[2]);
+        }
+
+        in = new Scanner(new File("text_files/Successful Search.txt"));
+        while (in.hasNext()) {
+            String line = in.nextLine();
+            String[] parts = line.split(" ");
+            intsSucc.add(Integer.parseInt(parts[0]));
+        }
+
+        in = new Scanner(new File("text_files/Unsuccessful Search.txt"));
+        while (in.hasNext()) {
+            String line = in.nextLine();
+            String[] parts = line.split(" ");
+            intsUnsucc.add(Integer.parseInt(parts[0]));
+        }
+
         while (desiredDensity <= 1) {
             ArrayList<Long> creation = new ArrayList<>();
-            ArrayList<Long> buildRead = new ArrayList<>();
-            ArrayList<Long> successRead = new ArrayList<>();
-            ArrayList<Long> unsuccessRead = new ArrayList<>();
 
             ArrayList<Long> builds = new ArrayList<>();
             ArrayList<Long> success = new ArrayList<>();
@@ -48,29 +72,13 @@ public class HashTest {
                 long elapsed = end - start;
                 creation.add(elapsed);
 
-                ArrayList<Integer> ints = new ArrayList<>();
-                ArrayList<String> names = new ArrayList<>();
-
                 if (i == 1)
                     builder.append(table.capacity() + ",");
 
-                in = new Scanner(new File("text_files/Large Data Set.txt"));
-
-                start = System.currentTimeMillis();
-                while (in.hasNext()) {
-                    String line = in.nextLine();
-                    String[] parts = line.split(" ");
-                    ints.add(Integer.parseInt(parts[0]));
-                    names.add(parts[1] + parts[2]);
-                }
-                end = System.currentTimeMillis();
-                elapsed = end - start;
-                buildRead.add(elapsed);
-
                 probes = 0;
                 start = System.currentTimeMillis();
-                for (int j = 0; j < ints.size(); j++)
-                    table.put(ints.get(j), names.get(j));
+                for (int j = 0; j < intsLarge.size(); j++)
+                    table.put(intsLarge.get(j), namesLarge.get(j));
 
                 end = System.currentTimeMillis();
                 elapsed = end - start;
@@ -78,24 +86,12 @@ public class HashTest {
                 buildProbes.add(probes / 50000.0);
                 System.out.println("Finish build " + i + " of " + trials + " for " + desiredDensity);
 
-                in = new Scanner(new File("text_files/Successful Search.txt"));
-                ints.clear();
-                names.clear();
 
-                start = System.currentTimeMillis();
-                while (in.hasNext()) {
-                    String line = in.nextLine();
-                    String[] parts = line.split(" ");
-                    ints.add(Integer.parseInt(parts[0]));
-                }
-                end = System.currentTimeMillis();
-                elapsed = end - start;
-                successRead.add(elapsed);
 
                 probes = 0;
                 start = System.currentTimeMillis();
-                for (int j = 0; j < ints.size(); j++)
-                    table.get(ints.get(j));
+                for (int j = 0; j < intsSucc.size(); j++)
+                    table.get(intsSucc.get(j));
 
                 end = System.currentTimeMillis();
                 elapsed = end - start;
@@ -103,23 +99,12 @@ public class HashTest {
                 successProbes.add(probes / 1000.0);
                 System.out.println("Finish successful " + i + " of " + trials + " for " + desiredDensity);
 
-                in = new Scanner(new File("text_files/Unsuccessful Search.txt"));
-                ints.clear();
 
-                start = System.currentTimeMillis();
-                while (in.hasNext()) {
-                    String line = in.nextLine();
-                    String[] parts = line.split(" ");
-                    ints.add(Integer.parseInt(parts[0]));
-                }
-                end = System.currentTimeMillis();
-                elapsed = end - start;
-                unsuccessRead.add(elapsed);
 
                 probes = 0;
                 start = System.currentTimeMillis();
-                for (int j = 0; j < ints.size(); j++)
-                    table.get(ints.get(j));
+                for (int j = 0; j < intsSucc.size(); j++)
+                    table.get(intsSucc.get(j));
 
                 end = System.currentTimeMillis();
                 elapsed = end - start;
@@ -130,15 +115,12 @@ public class HashTest {
 
             builder.append(creation.stream().mapToLong(n -> n).sum() / creation.size() + ",");
 
-            builder.append(buildRead.stream().mapToLong(n -> n).sum() / buildRead.size() + ",");
             builder.append(builds.stream().mapToLong(n -> n).sum() / builds.size() + ",");
             builder.append(buildProbes.stream().mapToDouble(n -> n).sum() / buildProbes.size() + ",");
 
-            builder.append(successRead.stream().mapToLong(n -> n).sum() / successRead.size() + ",");
             builder.append(success.stream().mapToLong(n -> n).sum() / success.size() + ",");
             builder.append(successProbes.stream().mapToDouble(n -> n).sum() / successProbes.size() + ",");
 
-            builder.append(unsuccessRead.stream().mapToLong(n -> n).sum() / unsuccessRead.size() + ",");
             builder.append(unsuccess.stream().mapToLong(n -> n).sum() / unsuccess.size() + ",");
             builder.append(unsuccessProbes.stream().mapToDouble(n -> n).sum() / unsuccessProbes.size());
 
