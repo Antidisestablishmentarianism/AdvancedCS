@@ -62,7 +62,7 @@ public class HashTest {
             ArrayList<Double> successProbes = new ArrayList<>();
             ArrayList<Double> unsuccessProbes = new ArrayList<>();
 
-            builder.append(desiredDensity + ",");
+            builder.append(desiredDensity).append(",");
 
             for (int i = 1; i <= trials; i++) {
                 int load = 500000;
@@ -73,7 +73,7 @@ public class HashTest {
                 creation.add(elapsed);
 
                 if (i == 1)
-                    builder.append(table.capacity() + ",");
+                    builder.append(table.capacity()).append(",");
 
                 probes = 0;
                 start = System.currentTimeMillis();
@@ -90,8 +90,8 @@ public class HashTest {
 
                 probes = 0;
                 start = System.currentTimeMillis();
-                for (int j = 0; j < intsSucc.size(); j++)
-                    table.get(intsSucc.get(j));
+                for (Integer key : intsSucc)
+                    table.get(key);
 
                 end = System.currentTimeMillis();
                 elapsed = end - start;
@@ -103,8 +103,8 @@ public class HashTest {
 
                 probes = 0;
                 start = System.currentTimeMillis();
-                for (int j = 0; j < intsSucc.size(); j++)
-                    table.get(intsSucc.get(j));
+                for (Integer key : intsSucc)
+                    table.get(key);
 
                 end = System.currentTimeMillis();
                 elapsed = end - start;
@@ -113,18 +113,16 @@ public class HashTest {
                 System.out.println("Finish unsuccessful " + i + " of " + trials + " for " + desiredDensity);
             }
 
-            builder.append(creation.stream().mapToLong(n -> n).sum() / creation.size() + ",");
+            builder.append(creation.stream().mapToLong(n -> n).sum() / creation.size()).append(",");
 
-            builder.append(builds.stream().mapToLong(n -> n).sum() / builds.size() + ",");
-            builder.append(buildProbes.stream().mapToDouble(n -> n).sum() / buildProbes.size() + ",");
+            builder.append(builds.stream().mapToLong(n -> n).sum() / builds.size()).append(",");
+            builder.append(buildProbes.stream().mapToDouble(n -> n).sum() / buildProbes.size()).append(",");
 
-            builder.append(success.stream().mapToLong(n -> n).sum() / success.size() + ",");
-            builder.append(successProbes.stream().mapToDouble(n -> n).sum() / successProbes.size() + ",");
+            builder.append(success.stream().mapToLong(n -> n).sum() / success.size()).append(",");
+            builder.append(successProbes.stream().mapToDouble(n -> n).sum() / successProbes.size()).append(",");
 
-            builder.append(unsuccess.stream().mapToLong(n -> n).sum() / unsuccess.size() + ",");
-            builder.append(unsuccessProbes.stream().mapToDouble(n -> n).sum() / unsuccessProbes.size());
-
-            builder.append("\n");
+            builder.append(unsuccess.stream().mapToLong(n -> n).sum() / unsuccess.size()).append(",");
+            builder.append(unsuccessProbes.stream().mapToDouble(n -> n).sum() / unsuccessProbes.size()).append("\n");
 
             System.out.println("Finish density " + desiredDensity);
             desiredDensity = Math.round((desiredDensity + increment) * 100.0) / 100.0;
@@ -134,7 +132,7 @@ public class HashTest {
         writer.close();
     }
 
-    public static int nextPrime(int n) {
+    private static int nextPrime(int n) {
         if (n % 2 == 0)
             n++;
 
@@ -144,7 +142,7 @@ public class HashTest {
         return n;
     }
 
-    public static boolean isPrime(int n) {
+    private static boolean isPrime(int n) {
         if (n % 2 == 0) return false;
 
         int max = (int) (Math.sqrt(n)) + 1;
