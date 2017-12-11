@@ -22,7 +22,7 @@ public class HashTableQuad<k, v> {
     }
 
     public v put(k key, v value) {
-        int index = getIndex(key);
+        int index = hashFunction(key);
         int count = (index + 1) % container.length;
         int skip = 2;
         int iterations = 0;
@@ -56,7 +56,7 @@ public class HashTableQuad<k, v> {
     }
 
     public v remove(k key) {
-        int index = getIndex(key);
+        int index = hashFunction(key);
         int count = (index + 1) % container.length;
         int skip = 2;
         int iterations = 0;
@@ -86,7 +86,7 @@ public class HashTableQuad<k, v> {
     }
 
     public v get(k key) {
-        int index = getIndex(key);
+        int index = hashFunction(key);
         int count = (index + 1) % container.length;
         int skip = 2;
         int iterations = 0;
@@ -123,7 +123,7 @@ public class HashTableQuad<k, v> {
         return size;
     }
 
-    private int getIndex(k key) {
+    private int hashFunction(k key) {
         return Math.abs(key.hashCode()) % container.length;
     }
 

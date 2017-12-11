@@ -1,11 +1,13 @@
 package hash_table;
 
+import java.lang.reflect.ParameterizedType;
+
 /**
  * Created by Saif on 11/2/2017.
  */
 public class HashTable<k, v> {
-    private Node<k, v>[] container;
-    private int size;
+    Node<k, v>[] container;
+    int size;
 
     public HashTable(int initCap) {
         container = new Node[initCap];
@@ -20,7 +22,7 @@ public class HashTable<k, v> {
     }
 
     public v put(k key, v value) {
-        int index = getIndex(key);
+        int index = hashFunction(key);
         int count = (index + 1) % container.length;
 
         if (size >= container.length) return null;
@@ -49,7 +51,7 @@ public class HashTable<k, v> {
     }
 
     public v remove(k key) {
-        int index = getIndex(key);
+        int index = hashFunction(key);
         int count = (index + 1) % container.length;
 
         if (key == null) return null;
@@ -73,7 +75,7 @@ public class HashTable<k, v> {
     }
 
     public v get(k key) {
-        int index = getIndex(key);
+        int index = hashFunction(key);
         int count = (index + 1) % container.length;
 
         if (key == null) return null;
@@ -104,7 +106,7 @@ public class HashTable<k, v> {
         return size;
     }
 
-    private int getIndex(k key) {
+    private int hashFunction(k key) {
         return Math.abs(key.hashCode()) % container.length;
     }
 

@@ -31,31 +31,32 @@ public class HashTest {
         double increment = 0.05;
         int trials = 10;
 
-        ArrayList<Integer> intsLarge = new ArrayList<>();
-        ArrayList<String> namesLarge = new ArrayList<>();
-        ArrayList<Integer> intsSucc = new ArrayList<>();
-        ArrayList<Integer> intsUnsucc = new ArrayList<>();
+        ArrayList<Name> namesLarge = new ArrayList<>();
+        ArrayList<Person> peopleLarge = new ArrayList<>();
+        ArrayList<Name> namesSucc = new ArrayList<>();
+        ArrayList<Name> namesUnsucc = new ArrayList<>();
 
-        in = new Scanner(new File("text_files/hash_table_test/Large Data Set.txt"));
+        in = new Scanner(new File("text_files/hash_table_people/Large Data Set.txt"));
         while (in.hasNext()) {
             String line = in.nextLine();
-            String[] parts = line.split(" ");
-            intsLarge.add(Integer.parseInt(parts[0]));
-            namesLarge.add(parts[1] + parts[2]);
+            String[] parts = line.split("\\s+");
+            Name name = new Name(parts[0], parts[1]);
+            namesLarge.add(name);
+            peopleLarge.add(new Person(name, parts[2], parts[3], parts[4]));
         }
 
-        in = new Scanner(new File("text_files/hash_table_test/Successful Search.txt"));
+        in = new Scanner(new File("text_files/hash_table_people/Successful Search Records.txt"));
         while (in.hasNext()) {
             String line = in.nextLine();
-            String[] parts = line.split(" ");
-            intsSucc.add(Integer.parseInt(parts[0]));
+            String[] parts = line.split("\\s+");
+            namesSucc.add(new Name(parts[0], parts[1]));
         }
 
-        in = new Scanner(new File("text_files/hash_table_test/Unsuccessful Search.txt"));
+        in = new Scanner(new File("text_files/hash_table_people/Unsuccessful Search Records.txt"));
         while (in.hasNext()) {
             String line = in.nextLine();
-            String[] parts = line.split(" ");
-            intsUnsucc.add(Integer.parseInt(parts[0]));
+            String[] parts = line.split("\\s+");
+            namesUnsucc.add(new Name(parts[0], parts[1]));
         }
 
         while (desiredDensity <= 1) {
@@ -73,7 +74,7 @@ public class HashTest {
 
             for (int i = 1; i <= trials; i++) {
                 long start = System.currentTimeMillis();
-                HashTableQuad<Integer, String> table = new HashTableQuad<>(nextPrime((int) (load * (1 / desiredDensity))));
+                HashTable<Name, Person> table = new HashTable<>(nextPrime((int) (load * (1 / desiredDensity))));
                 long end = System.currentTimeMillis();
                 long elapsed = end - start;
                 creation.add(elapsed);
@@ -83,8 +84,8 @@ public class HashTest {
 
                 probes = 0;
                 start = System.currentTimeMillis();
-                for (int j = 0; j < intsLarge.size(); j++)
-                    table.put(intsLarge.get(j), namesLarge.get(j));
+                for (int j = 0; j < namesLarge.size(); j++)
+                    table.put(namesLarge.get(j), peopleLarge.get(j));
 
                 end = System.currentTimeMillis();
                 elapsed = end - start;
@@ -96,7 +97,7 @@ public class HashTest {
 
                 probes = 0;
                 start = System.currentTimeMillis();
-                for (Integer key : intsSucc)
+                for (Name key : namesSucc)
                     table.get(key);
 
                 end = System.currentTimeMillis();
@@ -109,7 +110,7 @@ public class HashTest {
 
                 probes = 0;
                 start = System.currentTimeMillis();
-                for (Integer key : intsSucc)
+                for (Name key : namesSucc)
                     table.get(key);
 
                 end = System.currentTimeMillis();
