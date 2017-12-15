@@ -1,5 +1,7 @@
 package hash_table;
 
+import java.math.BigInteger;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -28,10 +30,12 @@ public class Name {
 
     @Override
     public int hashCode() {
-        return IntStream.range(0, toString().length()).map(i -> (i + 1) * toString().charAt(i)).sum();
+        BigInteger bigInt = new BigInteger(toString().chars().mapToObj(i -> Integer.toString(i - 0)).collect(Collectors.joining("")));
+        long hash = Long.parseLong(bigInt.mod(BigInteger.valueOf(Long.MAX_VALUE)).toString());
+        return (int) (Long.MAX_VALUE / Integer.MAX_VALUE * hash);
     }
 
     public String toString() {
-        return first + " " + last;
+        return first + last;
     }
 }

@@ -23,13 +23,13 @@ public class HashTest {
 
         builder.append("Density,Table size,Creation time,Build time,Build probes,Successful time,Successful probes,Unsuccessful time,Unsuccessful probes\n");
 
-        int load = 500000;
-        int testSuccess = 10000;
-        int testUnsuccess = 10000;
+        int load = 50000;
+        int testSuccess = 1000;
+        int testUnsuccess = 1000;
 
         double desiredDensity = 0.05;
         double increment = 0.05;
-        int trials = 10;
+        int trials = 100;
 
         ArrayList<Name> namesLarge = new ArrayList<>();
         ArrayList<Person> peopleLarge = new ArrayList<>();
@@ -74,7 +74,7 @@ public class HashTest {
 
             for (int i = 1; i <= trials; i++) {
                 long start = System.currentTimeMillis();
-                HashTable<Name, Person> table = new HashTable<>(nextPrime((int) (load * (1 / desiredDensity))));
+                HashTableQuad<Name, Person> table = new HashTableQuad<>(nextPrime((int) (load * (1 / desiredDensity))));
                 long end = System.currentTimeMillis();
                 long elapsed = end - start;
                 creation.add(elapsed);
