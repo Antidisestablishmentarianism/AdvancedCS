@@ -74,7 +74,7 @@ public class HashTest {
 
             for (int i = 1; i <= trials; i++) {
                 long start = System.currentTimeMillis();
-                HashTableQuad<Name, Person> table = new HashTableQuad<>(nextPrime((int) (load * (1 / desiredDensity))));
+                HashTableLL<Name, Person> table = new HashTableLL<>(nextPrime((int) (load * (1 / desiredDensity))));
                 long end = System.currentTimeMillis();
                 long elapsed = end - start;
                 creation.add(elapsed);
