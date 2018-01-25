@@ -14,14 +14,31 @@ public class RightTreeTest {
         int cases = Integer.parseInt(in.nextLine());
 
         for (int caseNum = 1; caseNum <= cases; caseNum++) {
-            String line = in.nextLine();
+            String line = in.nextLine() + "00000000000000000000000000000000000000000000000";
 
-            int[] tree = line.chars().map(o -> Integer.parseInt(o + "")).toArray();
+            int[] tree = line.chars().map(o -> o - 48).toArray();
 
-            for (int i = 0; i < tree.length; i++) {
-                if (tree[i * 2 + 1] > tree[i * 2 + 2])
-                    System.out.printf("");
+            boolean rightTree = true;
+
+            for (int i = tree.length - 1; i >= 0; i--) {
+                int left = i * 2 + 1;
+                int right = i * 2 + 2;
+
+                if (left >= tree.length) continue;
+                tree[i] += tree[left];
+
+                if (right >= tree.length) continue;
+                tree[i] += tree[right];
+
+                if (tree[left] > tree[right]) {
+                    System.out.printf("Tree %d is not a right-tree\n", caseNum);
+                    rightTree = false;
+                    break;
+                }
             }
+
+            if (rightTree)
+                System.out.printf("Tree %d is a right-tree\n", caseNum);
         }
     }
 }
