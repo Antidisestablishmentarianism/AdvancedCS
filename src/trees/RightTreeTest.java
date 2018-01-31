@@ -1,4 +1,4 @@
-package trees.right_tree;
+package trees;
 
 import java.io.File;
 import java.io.FileNotFoundException;
