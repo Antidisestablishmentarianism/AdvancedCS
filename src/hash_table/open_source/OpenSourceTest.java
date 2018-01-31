@@ -23,25 +23,20 @@ public class OpenSourceTest {
             if (line.equals("0")) break;
 
             if (line.equals("1")) {
-                // TODO: sort and print out previous entries
-
                 ArrayList<String> projList = new ArrayList<>();
                 projList.addAll(projects.keySet());
 
-                Collections.sort(projList, new Comparator<String>() {
-                    @Override
-                    public int compare(String o1, String o2) {
-                        HashSet<String> names1 = projects.get(o1);
-                        HashSet<String> names2 = projects.get(o2);
+                Collections.sort(projList, (o1, o2) -> {
+                    HashSet<String> names1 = projects.get(o1);
+                    HashSet<String> names2 = projects.get(o2);
 
-                        int size1 = names1.size();
-                        int size2 = names2.size();
+                    int size1 = names1.size();
+                    int size2 = names2.size();
 
-                        if (size1 == size2) {
-                            return o2.compareTo(o1);
-                        } else {
-                            return size2 - size1 > 0 ? 1 : -1;
-                        }
+                    if (size1 == size2) {
+                        return o2.compareTo(o1);
+                    } else {
+                        return size2 - size1 > 0 ? 1 : -1;
                     }
                 });
 

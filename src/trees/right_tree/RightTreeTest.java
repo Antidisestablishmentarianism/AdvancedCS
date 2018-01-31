@@ -31,14 +31,14 @@ public class RightTreeTest {
                 tree[i] += tree[right];
 
                 if (tree[left] > tree[right]) {
-                    System.out.printf("Tree %d is not a right-tree\n", caseNum);
+                    System.out.printf("Tree %d is not a right-tree.\n", caseNum);
                     rightTree = false;
                     break;
                 }
             }
 
             if (rightTree)
-                System.out.printf("Tree %d is a right-tree\n", caseNum);
+                System.out.printf("Tree %d is a right-tree.\n", caseNum);
         }
     }
 }
